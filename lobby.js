@@ -5,10 +5,7 @@ class Lobby {
       this.room = room;
       this.isPublic = isPublic;
       this.players = []
-      if (!isPublic) {
-        joincode = Util.generateId()
-        this.joincode = joincode
-      }
+      this.joincode = Util.generateId().substring(0,5) // all lobbies have joincodes regardless of being public or private
       Lobby.updateLobbyList(this)
     }
 

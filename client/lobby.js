@@ -11,13 +11,15 @@ function joinRandom(){
   //expecting joinedexistinglobbystatus response
   setStatus("Finding an open Lobby...")
 }
-function toggleJoinCodeField() {
-    var field = document.getElementById("join-code")
-    var button = document.getElementById("join-toggle-btn")
+function toggleJoinCodeField(reset=false) {
+  var field = document.getElementById("join-code")
+  var input = document.getElementById("join-code-input")
+  var button = document.getElementById("join-toggle-btn")
 
-    if (field.style.display == 'none') {
+    if (field.style.display == 'none' && !reset) {
         field.style.display = 'block';
         button.innerHTML = "Cancel"
+        input.select()
      }
      else {
          field.style.display = 'none';
@@ -106,6 +108,7 @@ function leaveLobby(){
   leftLobby();
 }
 function leftLobby(){
+  toggleJoinCodeField(true)
   var button = document.getElementById("create-lobby-btn")
   button.innerHTML = "Create New Lobby"
   button.disabled = false

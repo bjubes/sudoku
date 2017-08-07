@@ -20,14 +20,11 @@ serv.listen(process.env.PORT || 2000);
 console.log("----server started-----");
 
 DEBUG = process.env.DEBUG
-SOCKET_LIST = {};
 
 io = require('socket.io')(serv,{});
 io.sockets.on('connection', function(socket){
-	SOCKET_LIST[socket.id] = socket;
   console.log(socket.id + " connected.");
   var response = "connected as " + socket.id
-  socket.join("test-room")
   socket.emit('addToChat', {name:"Server", msg: response})
 
 	socket.on('createLobby', function(data){
@@ -55,9 +52,14 @@ io.sockets.on('connection', function(socket){
     for (var i = 0; i < Lobby.prototype.LobbyList.length; i++) {
       if (code == Lobby.prototype.LobbyList[i].joincode){
         joinLobby(Lobby.prototype.LobbyList[i], socket, err )
-        break;
+        return;
       }
     }
+    var statusObj = {
+      success: false,
+      err: err
+    }
+    socket.emit('joinExisitingLobbyStatus', statusObj);
   })
 
   socket.on('requestPlayerList', function(){
@@ -70,7 +72,6 @@ io.sockets.on('connection', function(socket){
 
 	socket.on('disconnect',function(){
     console.log(socket.id + " disconnected.");
-		delete SOCKET_LIST[socket.id];
 	})
 
 	socket.on('chatToServer',function(msg){
