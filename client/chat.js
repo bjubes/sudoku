@@ -20,7 +20,7 @@ chatForm.onsubmit = function(e){
    e.preventDefault();
    if(chatInput.value[0] === '/')
 	   socket.emit('evalServer',chatInput.value.slice(1));
-   else
+   else if (chatInput.value)
 	   socket.emit('chatToServer',chatInput.value);
    chatInput.value = '';
 }

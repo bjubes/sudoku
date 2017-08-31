@@ -1,39 +1,60 @@
-<h2>Sudoku</h2>
-<p id="lobby-status"></p>
-<div id="game" style="display:none">
-    <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
-</div>
-<div id="room-selection">
-  <div id="not-in-lobby">
-    <button id="join-random-btn" onclick="joinRandom()">Random Game</button>
-    <button id="create-lobby-btn"  onclick="createNewLobby()">Create New Lobby</button>
-    <button id="join-toggle-btn" onclick="toggleJoinCodeField()">Join Existing Lobby</button>
-  </div>
-  <div id="in-lobby" style="display:none">
-    <button id="leave-lobby-btn" onclick="leaveLobby()">Leave Lobby</button>
-  </div>
-    <div id="join-code" style="display:none">
-        <input id="join-code-input" type="text"><button onclick="joinExisitingLobby()">Join</button>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h2>Sudoku</h2>
+      </div>
     </div>
-</div>
-<br>
-<div id="chat" style="display:none">
-    <div id="chat-text" style="width:500px;height:100px;overflow-y:scroll">
+    <div class="row">
+        <div class="col">
+        <p id="lobby-status"></p>
+        <div id="game" style="display:none">
+            <canvas id="ctx" width="500" height="500" style="border:1px solid #000000;"></canvas>
+        </div>
+        <div id="room-selection">
+          <div id="not-in-lobby">
+            <button id="join-random-btn" onclick="joinRandom()">Random Game</button>
+            <button id="create-lobby-btn"  onclick="createNewLobby()">Create New Lobby</button>
+            <button id="join-toggle-btn" onclick="toggleJoinCodeField()">Join Existing Lobby</button>
+          </div>
+          <div id="in-lobby" style="display:none">
+            <button id="leave-lobby-btn" onclick="leaveLobby()">Leave Lobby</button>
+          </div>
+            <div id="join-code" style="display:none">
+                <input id="join-code-input" type="text"><button onclick="joinExisitingLobby()">Join</button>
+            </div>
+        </div>
+        <br>
+        <div id="chat" style="display:none">
+            <div id="chat-text" style="width:500px;height:100px;overflow-y:scroll">
+            </div>
+
+            <form id="chat-form">
+                <input id="chat-input" type="text" style="width:500px" placeholder="Chat"></input>
+            </form>
+        </div>
+      </div>
+      <div id="player-col"> <!-- becomes col when activated -->
+        <div id="player-table-div" style="display:none">
+          <table id="player-table">
+            <tr>
+              <th>Players</th>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
-
-    <form id="chat-form">
-        <input id="chat-input" type="text" style="width:500px" placeholder="Chat"></input>
-    </form>
-</div>
-<div id="player-table-div" style="display:none">
-  <table id="player-table">
-    <tr>
-      <th>Name</th>
-    </tr>
-  </table>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-<script src="/client/game.js"></script>
-<script src="/client/lobby.js"></script>
-<script src="/client/chat.js"></script>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  <script src="/client/game.js"></script>
+  <script src="/client/lobby.js"></script>
+  <script src="/client/chat.js"></script>
+  <!-- Boostrap stuffs -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+</body>

@@ -78,7 +78,6 @@ io.sockets.on('connection', function(socket){
     socket.on('chatToServer',function(msg){
     if (socket.room!= undefined){
       io.to(socket.room).emit('addToChat', {name: socket.id, msg: msg})
-      console.log({name: socket.id, msg: msg});
     }
   })
 
