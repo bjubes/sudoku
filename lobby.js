@@ -4,7 +4,7 @@ class Lobby {
     constructor(room, isPublic = true){
       this.room = room;
       this.isPublic = isPublic;
-      this.players = []
+      this.players = new Set()
       this.joincode = Util.generateId().substring(0,5) // all lobbies have joincodes regardless of being public or private
       Lobby.updateLobbyList(this)
     }
@@ -16,7 +16,7 @@ class Lobby {
 
     static createAndJoinLobby(socket, roomName, isPublic){
       var lobby = new Lobby(roomName, isPublic)
-      Lobby.JoinLobby(socket, lobby)
+      Lobby.joinLobby(socket, lobby)
       socket.emit('createLobbyStatus', {success: true});
     }
 
@@ -29,23 +29,28 @@ class Lobby {
       console.log("ERR: cannot find lobby with name: "+ name)
     }
 
-    static JoinLobby(socket, lobby){
+    static joinLobby(socket, lobby){
       Lobby.leaveLobby(socket,false)
       socket.join(lobby.room)
       socket.room = lobby.room; //aribtrary for bookkeeping
       socket.lobby = lobby // not sure if lobby can be arbitrarily added to socket...
-      lobby.players.push(socket.id)
+      lobby.players.add(socket.id)
       var msg = socket.id + " joined the lobby"
       io.sockets.in(lobby.room).emit('addToChat', {name: "Server", msg: msg})
       io.sockets.in(lobby.room).emit('playerJoinLobby', {name: socket.id})
+      socket.emit('playerList', Array.from(lobby.players))
+
     }
 
-    static leaveLobby(socket, strict= true){
+    static leaveLobby(socket, strict = true){
       if(socket.room) {
         socket.room = undefined;
+        if (!socket.lobby){
+          throw new console.error("Socket with a room has no lobby");
+        }
         var lobby = socket.lobby
-        delete lobby.players[socket.id]
-        if (lobby.players.length == 0 ){
+        lobby.players.delete(socket.id)
+        if (lobby.players.size == 0 ){
           lobby.destroy();
         } else {
           io.sockets.in(lobby.room).emit('playerLeaveLobby', {name: socket.id})

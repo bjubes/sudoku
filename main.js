@@ -12,7 +12,7 @@ app.get('*', function(req,res,next) {
     next() /* Continue to other routes if we're not redirecting */
 });
 app.get('/',function(req, res) {
-	res.sendFile(__dirname + '/client/index.html');
+    res.sendFile(__dirname + '/client/index.html');
 });
 app.use('/client',express.static(__dirname + '/client'));
 
@@ -27,16 +27,16 @@ io.sockets.on('connection', function(socket){
   var response = "connected as " + socket.id
   socket.emit('addToChat', {name:"Server", msg: response})
 
-	socket.on('createLobby', function(data){
+    socket.on('createLobby', function(data){
     Lobby.createAndJoinLobby(socket,data.roomName,data.isPublic)
-	})
+    })
 
   socket.on('joinRandomGame', function(){
     var err = "No open games."
     for (var i = 0; i < Lobby.prototype.LobbyList.length; i++) {
-      if (Lobby.prototype.LobbyList[i].players.length < 4){
-        joinLobby(Lobby.prototype.LobbyList[i], socket, err )
-        return;
+      if (Lobby.prototype.LobbyList[i].players.size < 4){
+    joinLobby(Lobby.prototype.LobbyList[i], socket, err )
+    return;
       }
     }
     var statusObj = {
@@ -51,8 +51,8 @@ io.sockets.on('connection', function(socket){
     var lobby;
     for (var i = 0; i < Lobby.prototype.LobbyList.length; i++) {
       if (code == Lobby.prototype.LobbyList[i].joincode){
-        joinLobby(Lobby.prototype.LobbyList[i], socket, err )
-        return;
+    joinLobby(Lobby.prototype.LobbyList[i], socket, err )
+    return;
       }
     }
     var statusObj = {
@@ -63,18 +63,19 @@ io.sockets.on('connection', function(socket){
   })
 
   socket.on('requestPlayerList', function(){
-    socket.emit('playerList', socket.lobby.players)
+    socket.emit('playerList', Array.from(socket.lobby.players))
   })
 
   socket.on('leaveLobby', function(){
     Lobby.leaveLobby(socket);
   })
 
-	socket.on('disconnect',function(){
+  socket.on('disconnect',function(){
+    Lobby.leaveLobby(socket)
     console.log(socket.id + " disconnected.");
-	})
+    })
 
-	socket.on('chatToServer',function(msg){
+    socket.on('chatToServer',function(msg){
     if (socket.room!= undefined){
       io.to(socket.room).emit('addToChat', {name: socket.id, msg: msg})
       console.log({name: socket.id, msg: msg});
@@ -82,10 +83,10 @@ io.sockets.on('connection', function(socket){
   })
 
    socket.on('evalServer',function(data){
-	   if(!DEBUG)
-		   return;
-	   var res = eval(data);
-	   socket.emit('evalResponse',res);
+       if(!DEBUG)
+       return;
+       var res = eval(data);
+       socket.emit('evalResponse',res);
    });
 
 });
@@ -93,19 +94,19 @@ io.sockets.on('connection', function(socket){
 
 function joinLobby(lobby, socket, error) {
     var statusObj = {success:false, err:error}
-      if (lobby.players.length < 4){
-        statusObj = {
-            success: true,
-            lobby: lobby,
-            err:""
-        }
-        Lobby.JoinLobby(socket, lobby)
+      if (lobby.players.size < 4){
+    statusObj = {
+    success: true,
+    lobby: lobby,
+    err:""
+    }
+    Lobby.joinLobby(socket, lobby)
       }
       else  {
-        statusObj = {
-          success: false,
-          err:"That lobby is full"
-        }
+    statusObj = {
+      success: false,
+      err:"That lobby is full"
+    }
       }
     socket.emit('joinExisitingLobbyStatus', statusObj);
 }

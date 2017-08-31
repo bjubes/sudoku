@@ -99,6 +99,7 @@ function joinedLobby(){
   document.getElementById("chat").style.display = 'block'
   document.getElementById("not-in-lobby").style.display = 'none'
   document.getElementById("in-lobby").style.display = 'block'
+  document.getElementById("player-table-div").style.display = 'block'
   setStatus("In Lobby: " + lobbyName)
 }
 
@@ -112,6 +113,7 @@ function leftLobby(){
   var button = document.getElementById("create-lobby-btn")
   button.innerHTML = "Create New Lobby"
   button.disabled = false
+  document.getElementById("player-table-div").style.display = 'none'
   document.getElementById("chat").style.display = 'none'
   document.getElementById("not-in-lobby").style.display = 'block'
   document.getElementById("in-lobby").style.display = 'none'
